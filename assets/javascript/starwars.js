@@ -25,13 +25,14 @@ $(function(){
 		selected: false,
 		},
 		darthVadar:{name: "Darth Vadar",
-		img: "assets/images/vader.jpg",
+		img: "assets/images/vadar.jpg",
 		hp: "100",
 		attack: "100",
 		counterAttack: "",
 		location: "start",
 		selected: false,
 		},
+
 
 	}
 console.log(initialGameObject);
@@ -45,29 +46,54 @@ console.log(initialGameObject);
 // });	
 
 var currentGame = jQuery.extend({}, initialGameObject);
+console.log(currentGame);
+var kickOff = false;
+
 
 $(".charImg").on('click', function charSelect(){
-	var you = $('.charImg').val(currentGame.name); //update pulled attributes from object
-	currentGame.selected = true;
-	console.log(you);
-	$('.charImg').html(); //moves non selected images to the enemies boxes
-	$('#youImg').html(); //update image location based on object location
+	var keySelect = $(this).attr('attr');
+	console.log(keySelect);
+	var objSel = currentGame[keySelect];
+	objSel.selected = true;
+
+	if (kickOff === false) {
+		kickOff = true;
+		
+		
+
+	//Object.keys(currentGame).forEach(key => $('.fighters').append($('<img>', {id: currentGame[key].name, src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail" })));
+	// console.log(currentGame);
+
+		$('#youDiv').append($('<img>', {id:"youImg", src: objSel.img, width:"304", height:"236", class:"img-thumbnail" })); //update image location based on object location
+		$('#selected').html("You have selected:" + objSel.name);
+		$('.score').append("Your current health:" + objSel.hp);
+		this.remove();
+
+	} else {
+
+		var enemy = objSel;
+		console.log(enemy);
+
+	}
+
 });
 
-$('attack').on('click', function attack(){
-	//check if enemy is loaded to attack
+
+	$('attack').on('click', function attack(){
+		//check if enemy is loaded to attack
+		console.log("attack");
 
 
-	//apply attack  
-	function cAttack() {
-		var one = "hold";
-	//currentGame.
-	//bigobject.function() being called then the smaller stuff use this.namedunederobject
-	}
+		//apply attack  
+		function cAttack() {
+			var one = "hold";
+		//currentGame.
+		//bigobject.function() being called then the smaller stuff use this.namedunederobject
+		}
 
-	function health() {
-		var a = 2;
-	}
+		function health() {
+			var a = 2;
+		}
 
 });
 
