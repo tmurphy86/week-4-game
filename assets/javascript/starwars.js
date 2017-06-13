@@ -1,32 +1,36 @@
 $(function(){
 	var initialGameObject = {
 		obiWan: {name: "Obi-Wan",
-		img: "location",
+		img: "assets/images/obi.jpg",
 		hp: "100",
 		attack: "100",
 		counterAttack: "",
 		location: "start",
+		selected: false,
 		},
-		darthMaul:{name: "Darth Maul",
-		img: "location",
+		Ewok:{name: "Ewok",
+		img: "assets/images/ewok.jpg",
 		hp: "100",
 		attack: "100",
 		counterAttack: "",
 		location: "start",
+		selected: false,
 		},
-		lukeSky:{name: "Luke Skywalker",
-		img: "location",
-		hp: "100",
-		attack: "100",
-		counterAttack: "",
-		location: "start"
-		},
-		darthSid:{name: "Darth Sid",
-		img: "location",
+		stormTrooper:{name: "Storm Trooper",
+		img: "assets/images/storm.jpg",
 		hp: "100",
 		attack: "100",
 		counterAttack: "",
 		location: "start",
+		selected: false,
+		},
+		darthVadar:{name: "Darth Vadar",
+		img: "assets/images/vader.jpg",
+		hp: "100",
+		attack: "100",
+		counterAttack: "",
+		location: "start",
+		selected: false,
 		},
 
 	}
@@ -43,7 +47,9 @@ console.log(initialGameObject);
 var currentGame = jQuery.extend({}, initialGameObject);
 
 $(".charImg").on('click', function charSelect(){
-	var you = $(this).attr('value'); //update pulled attributes from object
+	var you = $('.charImg').val(currentGame.name); //update pulled attributes from object
+	currentGame.selected = true;
+	console.log(you);
 	$('.charImg').html(); //moves non selected images to the enemies boxes
 	$('#youImg').html(); //update image location based on object location
 });
@@ -56,6 +62,7 @@ $('attack').on('click', function attack(){
 	function cAttack() {
 		var one = "hold";
 	//currentGame.
+	//bigobject.function() being called then the smaller stuff use this.namedunederobject
 	}
 
 	function health() {
