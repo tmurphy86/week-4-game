@@ -3,7 +3,7 @@ $(function(){
 		obiWan: {name: "Obi-Wan",
 		img: "assets/images/obi.jpg",
 		hp: "190",
-		attack: "9",
+		attack: "4",
 		counterAttack: "9",
 		location: "start",
 		selected: false,
@@ -11,8 +11,8 @@ $(function(){
 		Ewok:{name: "Ewok",
 		img: "assets/images/ewok.jpg",
 		hp: "100",
-		attack: "4",
-		counterAttack: "3",
+		attack: "3",
+		counterAttack: "25",
 		location: "start",
 		selected: false,
 		},
@@ -27,20 +27,12 @@ $(function(){
 		darthVadar:{name: "Darth Vadar",
 		img: "assets/images/vadar.jpg",
 		hp: "170",
-		attack: "8",
+		attack: "1",
 		counterAttack: "5",
 		location: "start",
 		selected: false,
 		},
 	}
-// var listOfObjects = [];
-// var a = ["car", "bike", "scooter"];
-// a.forEach(function(entry) {
-//     var singleObj = {}
-//     singleObj['type'] = 'vehicle';
-//     singleObj['value'] = entry;
-//     listOfObjects.push(singleObj);
-// });	
 
 //setting game variables
 var currentGame = jQuery.extend({}, initialGameObject);
@@ -50,13 +42,11 @@ var player;
 var baseAP;
 var ap;
 var playerHP;
+var add =0;
+var enemyHP = null;
+var cap = null;
+restart();
 
-Object.keys(currentGame).forEach(key =>{
-	if (!currentGame[key].selected) {
-		var keyadd = key;
-		$('.fighters').append($('<img>', {id: currentGame[key].name, alt: key , src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail charImg"}));
-	}
-});
 
 function charSelect(){
 	var keySelect = $(this).attr('alt');
@@ -81,8 +71,8 @@ function charSelect(){
 		//setting variables
 		opp = true;
 		var enemy = objSel;
-		var enemyHP = parseInt(enemy.hp);
-		var cap = parseInt(enemy.counterAttack);
+		enemyHP = parseInt(enemy.hp);
+		cap = parseInt(enemy.counterAttack);
 
 		console.log(ap);
 		console.log(enemyHP);
@@ -100,10 +90,11 @@ function charSelect(){
 				enemyHP = (enemyHP-ap);
 				playerHP = (playerHP-cap);
 				ap = baseAP + ap;
+				
 
-				console.log("enemyHP" + enemyHP);
-				console.log("playerHP" + playerHP);
-				console.log("attack" + ap);
+				console.log("enemyHP: " + enemyHP);
+				console.log("playerHP: " + playerHP);
+				console.log("attack: " + ap);
 				console.log("shoudsay" + baseAP);
 
 				$('.pscore').html("Your current health:" + playerHP);
@@ -112,41 +103,78 @@ function charSelect(){
 				if (enemyHP <=0){
 					console.log("gameover");
 					opp = false;
-					enemy = "";
-					enemyHP = "";
-					cap = "";
+					enemyHP = null;
+					cap = null;
 					$('.escore').html("Select a new opponent");
 
 					//resetting display 
 					$('.fighters').empty();
+					add++;
+					console.log(add)
+					Object.keys(currentGame).forEach(key =>{
 
-						Object.keys(currentGame).forEach(key =>{
-							if (!currentGame[key].selected) {
-								$('.fighters').append($('<img>', {id: currentGame[key].name, alt: key , src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail charImg"}));
+						if (!currentGame[key].selected) {
+							$('.fighters').append($('<img>', {id: currentGame[key].name, alt: key , src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail charImg"}));
+								
 							}
-						});	
-					//return;
+						});
 
+					if(add===3){
+						$('#ava').html("You have won, select restart to play again");
+					}	
+				}
+
+				if (playerHP<=0){
+					$('#ava').html("You have lost, losser!");
+					this.remove();
 				}
 			}
 
 
 		});
 
-		}
+	}
 
 };
 
 
 
 
-$("#restart").on('click', function restart(){
-	currentGame = jQuery.extend({}, initialGameObject);
-	console.log(currentGame);
-	hits = 1;
-	kickOff = false;
+$("#restart").on('click', function reset(){
+	restart();
 });
 
+function restart(){
+
+	//setting html
+	$('#ava').html('Characters avaliable for selection');
+	$('#selected').html('Pick a Character');
+	$('.fighters').empty();
+	$('#youDiv').empty();
+	$('.pscore').html("Your Score");
+	$('.escore').html('Oppenent Score');
+
+	//variables reset
+	kickOff = false;
+	opp = false;
+	add = 0;
+	player = null;
+	baseAP = null;
+	ap = null;
+	playerHP = null;
+
+	
+	//display images for selection
+	currentGame = jQuery.extend({}, initialGameObject);
+	Object.keys(currentGame).forEach(key =>{
+		$('.fighters').append($('<img>', {id: currentGame[key].name, alt: key , src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail charImg"}));
+	});
+	
+
+}
+
+
 $(document).on('click', '.charImg', charSelect);
+
 });
 
