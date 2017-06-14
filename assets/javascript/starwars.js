@@ -50,7 +50,7 @@ var player;
 var baseAP;
 var ap;
 var playerHP;
-var hits;
+
 Object.keys(currentGame).forEach(key =>{
 	if (!currentGame[key].selected) {
 		var keyadd = key;
@@ -58,9 +58,8 @@ Object.keys(currentGame).forEach(key =>{
 	}
 });
 
-$(".charImg").on('click', function charSelect(){
+function charSelect(){
 	var keySelect = $(this).attr('alt');
-	console.log(keySelect);
 	var objSel = currentGame[keySelect];
 	objSel.selected = true;
 
@@ -70,7 +69,6 @@ $(".charImg").on('click', function charSelect(){
 		playerHP = parseInt(player.hp);
 		baseAP = parseInt(player.attack);
 		ap = baseAP;
-		hits = 1;
 		
 		$('#youDiv').append($('<img>', {id:"youImg", src: objSel.img, width:"304", height:"236", class:"img-thumbnail" })); //update image location based on object location
 		$('#selected').html("You have selected:" + objSel.name);
@@ -80,58 +78,64 @@ $(".charImg").on('click', function charSelect(){
 
 	} else {
 
-			opp = true;
-			var enemy = objSel;
-			console.log(enemy);
-			$('#ava').html("Enemy Selected: " + objSel.name);
-			$('.escore').html(objSel.name + " current health: " + objSel.hp);
+		//setting variables
+		opp = true;
+		var enemy = objSel;
+		var enemyHP = parseInt(enemy.hp);
+		var cap = parseInt(enemy.counterAttack);
 
+		console.log(ap);
+		console.log(enemyHP);
 
-			//check if enemy is loaded to attack
-			if(opp === true) {
+		//writing to html screen
+		$('#ava').html("Enemy Selected: " + enemy.name);
+		$('.escore').html(enemy.name + " current health: " + enemy.hp);
 
-				//attack onclick
-				console.log(ap);
-				var enemyHP = parseInt(enemy.hp);
-				console.log(enemyHP);
-				var cap = parseInt(enemy.counterAttack);
+		
+		//attack onclick
+		$('#attack').on('click', function attack(){
+			
+			if(opp ===true){
 
-				$('#attack').on('click', function attack(){
-					enemyHP = (enemyHP-ap);
-					playerHP = (playerHP-cap);
-					ap = baseAP + ap;
-					// Math.pow(baseAP, hits);
-					hits++;
-					console.log("enemyHP" + enemyHP);
-					console.log("playerHP" + playerHP);
-					console.log("attack" + ap);
-					//console.log("exponental" + hits);
-					console.log("shoudsay" + baseAP);
-					$('.pscore').html("Your current health:" + playerHP);
-					$('.escore').html(objSel.name + " current health: " + enemyHP);
+				enemyHP = (enemyHP-ap);
+				playerHP = (playerHP-cap);
+				ap = baseAP + ap;
 
-					if (enemyHP <=0){
-							console.log("gameover");
-							opp = false;
-							$('.fighters').empty();
+				console.log("enemyHP" + enemyHP);
+				console.log("playerHP" + playerHP);
+				console.log("attack" + ap);
+				console.log("shoudsay" + baseAP);
 
-							Object.keys(currentGame).forEach(key =>{
-								if (!currentGame[key].selected) {
-									$('.fighters').append($('<img>', {id: currentGame[key].name, src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail" }));
-								}
-							});
-							enemy = "";
+				$('.pscore').html("Your current health:" + playerHP);
+				$('.escore').html(enemy.name + " current health: " + enemyHP);
 
+				if (enemyHP <=0){
+					console.log("gameover");
+					opp = false;
+					enemy = "";
+					enemyHP = "";
+					cap = "";
+					$('.escore').html("Select a new opponent");
 
-					}
-				});
+					//resetting display 
+					$('.fighters').empty();
 
-			}else {
-				this.remove();
+						Object.keys(currentGame).forEach(key =>{
+							if (!currentGame[key].selected) {
+								$('.fighters').append($('<img>', {id: currentGame[key].name, alt: key , src: currentGame[key].img, width:"304", height:"236", class:"img-thumbnail charImg"}));
+							}
+						});	
+					//return;
+
+				}
 			}
+
+
+		});
+
 		}
 
-});
+};
 
 
 
@@ -143,6 +147,6 @@ $("#restart").on('click', function restart(){
 	kickOff = false;
 });
 
-
+$(document).on('click', '.charImg', charSelect);
 });
 
